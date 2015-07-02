@@ -7,11 +7,18 @@ C:\Users\User\Desktop\Robot_car_arduino_controller\Robot_car_arduino_controller\
 C:\Users\User\Desktop\Robot_car_arduino_controller\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.exe
 C:\Users\User\Desktop\Robot_car_arduino_controller\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.pdb
 D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\bin\Debug\Robot_car_arduino_controller.exe.config
-D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.exe
-D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.pdb
 D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\bin\Debug\Robot_car_arduino_controller.exe
 D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\bin\Debug\Robot_car_arduino_controller.pdb
-D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.csprojResolveAssemblyReference.cache
-D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.Form1.resources
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.Robot_car_arduino_controller_form.resources
 D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.Properties.Resources.resources
 D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.csproj.GenerateResource.Cache
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.exe
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.pdb
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\bin\Debug\Robot_car_arduino_controller.exe.config
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\bin\Debug\Robot_car_arduino_controller.exe
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\bin\Debug\Robot_car_arduino_controller.pdb
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.Robot_car_arduino_controller_form.resources
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.Properties.Resources.resources
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.csproj.GenerateResource.Cache
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.exe
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\obj\Debug\Robot_car_arduino_controller.pdb

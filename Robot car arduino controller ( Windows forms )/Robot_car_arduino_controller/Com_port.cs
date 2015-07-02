@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Linq;
+﻿using System.IO.Ports;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Robot_car_arduino_controller
 {
@@ -24,7 +20,7 @@ namespace Robot_car_arduino_controller
 
       // Set the read/write timeouts
       serialPort.ReadTimeout = 3000;  // 3 seconds
-      serialPort.WriteTimeout = 3000;  // 3 seconds 
+      serialPort.WriteTimeout = 3000;  // 3 seconds
 
       serialPort.Open();
     }
@@ -34,14 +30,18 @@ namespace Robot_car_arduino_controller
       // The command looks like this: "L00S00"
       byte[] Command_bytes_array = Encoding.ASCII.GetBytes( Command_string );
 
-      serialPort.Write( buffer : Command_bytes_array,
-                        offset : 0,
-                        count : 6 );
+      serialPort.Write( buffer: Command_bytes_array,
+                        offset: 0,
+                        count: 6 );
     }
 
-    ~Com_port_class()  // Destructor
+    public void Close()
     {
-      serialPort.Close();
+      if( serialPort != null )
+      {
+        serialPort.Close();
+        serialPort = null;
+      }
     }
   }
 }

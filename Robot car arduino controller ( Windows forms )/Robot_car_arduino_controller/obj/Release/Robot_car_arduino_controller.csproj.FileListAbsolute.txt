@@ -1,0 +1,8 @@
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\bin\Release\Robot_car_arduino_controller.exe.config
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\bin\Release\Robot_car_arduino_controller.exe
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\bin\Release\Robot_car_arduino_controller.pdb
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\obj\Release\Robot_car_arduino_controller.Robot_car_arduino_controller_form.resources
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\obj\Release\Robot_car_arduino_controller.Properties.Resources.resources
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\obj\Release\Robot_car_arduino_controller.csproj.GenerateResource.Cache
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\obj\Release\Robot_car_arduino_controller.exe
+D:\Arduino\Robot car arduino controller ( Windows forms )\Robot_car_arduino_controller\obj\Release\Robot_car_arduino_controller.pdb

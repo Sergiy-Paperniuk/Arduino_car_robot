@@ -6,17 +6,17 @@ using System.Windows.Forms;
 
 namespace Robot_car_arduino_controller
 {
-    static class Program
+  static class Program
+  {
+    /// <summary>
+    /// The main entry point for the application.
+    /// </summary>
+    [STAThread]
+    static void Main()
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
-        }
+      Application.EnableVisualStyles();
+      Application.SetCompatibleTextRenderingDefault( false );
+      Application.Run( new Robot_car_arduino_controller_form() );
     }
+  }
 }

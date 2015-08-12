@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Com_port.cs" />
+    <Compile Include="HandController.cs" />
     <Compile Include="Joystick_controller_class.cs" />
     <Compile Include="Robot_car_arduino_controller_form.cs">
       <SubType>Form</SubType>

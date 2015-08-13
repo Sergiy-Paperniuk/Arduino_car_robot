@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Robot_car_arduino_controller {
@@ -158,8 +159,9 @@ namespace Robot_car_arduino_controller {
 		private void Send_current_joystick_command_to_com_port() {
 
 			string command = Joystick_controller.Get_joystick_command_string();
+			byte[] Command_bytes_array = Encoding.ASCII.GetBytes( command );
 
-			SendCommand( command );
+			SendCommand( Command_bytes_array );
 		}
 
 		private void SendCurrentHandCommand() {
@@ -167,13 +169,20 @@ namespace Robot_car_arduino_controller {
 				lstHandCommands.Items.Clear();
 			}
 
-			foreach( string cmd in m_handController.GetCommand() ) {
-				lstHandCommands.Items.Add( cmd );
+			foreach( byte[] cmd in m_handController.GetCommand() ) {
+
+				string outputCommand = String.Format(
+					"H {0} {1}",
+					Convert.ToInt32( cmd[1] ),
+					Convert.ToInt32( cmd[2] )
+				);
+
+				lstHandCommands.Items.Add( outputCommand );
 				SendCommand( cmd );
 			}
 		}
 
-		private void SendCommand( string command ) {
+		private void SendCommand( byte[] command ) {
 			if( Current_com_port == null ) {
 				return;
 			}
@@ -193,7 +202,7 @@ namespace Robot_car_arduino_controller {
 		#endregion  // Timer tick event. COM port interaction.
 
 		private void Send_one_comand_timer_tick( object sender, EventArgs e ) {
-			Send_current_joystick_command_to_com_port();
+			//Send_current_joystick_command_to_com_port();
 			SendCurrentHandCommand();
 
 			// Turn left

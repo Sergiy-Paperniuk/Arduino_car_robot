@@ -1,4 +1,5 @@
-﻿using System.IO.Ports;
+﻿using System;
+using System.IO.Ports;
 using System.Text;
 
 namespace Robot_car_arduino_controller
@@ -25,17 +26,16 @@ namespace Robot_car_arduino_controller
       serialPort.Open();
     }
 
-    public void Write( string Command_string )
-    {
-      // The command looks like this: "L00S00"
-      byte[] Command_bytes_array = Encoding.ASCII.GetBytes( Command_string );
+		public void Write( byte[] cmd ) {
 
-      serialPort.Write( buffer: Command_bytes_array,
-                        offset: 0,
-                        count: 6 );
-    }
+			serialPort.Write( 
+					buffer: cmd,
+					offset: 0,
+					count: cmd.Length
+				);
+		}
 
-    public void Close()
+		public void Close()
     {
       if( serialPort != null )
       {
@@ -43,5 +43,5 @@ namespace Robot_car_arduino_controller
         serialPort = null;
       }
     }
-  }
+	}
 }

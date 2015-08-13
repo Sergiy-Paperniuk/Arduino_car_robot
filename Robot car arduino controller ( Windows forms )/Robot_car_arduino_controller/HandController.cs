@@ -18,11 +18,11 @@ namespace Robot_car_arduino_controller {
 
 			private int m_currentAngle;
 
-			public Servo( int number ) {
+			public Servo( byte number ) {
 				Number = number;
 			}
 
-			public int Number { get; private set; }
+			public byte Number { get; private set; }
 
 			public int CurrentAngle {
 				get {
@@ -46,16 +46,13 @@ namespace Robot_car_arduino_controller {
 
 			public bool IsChanged { get; set; }
 
-			public string GetCommand() {
-				const string command = "HN{0:00}A{1:00}";
+			public byte[] GetCommand() {
 
-				int angle = ( CurrentAngle * 99 ) / 180;
-
-				string result = String.Format(
-						command,
+				byte[] result = new byte[]{
+						Convert.ToByte('H'),
 						Number,
-						angle
-					);
+						Convert.ToByte(CurrentAngle)
+					};
 
 				IsChanged = false;
 				return result;
@@ -71,7 +68,7 @@ namespace Robot_car_arduino_controller {
 			new Servo(5)
 		};
 
-		public string[] GetCommand() {
+		public IEnumerable<byte[]> GetCommand() {
 
 			return m_servoes
 				.Where( x => x.IsChanged )

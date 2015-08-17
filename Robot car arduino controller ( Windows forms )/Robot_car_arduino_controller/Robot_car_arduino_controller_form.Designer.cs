@@ -161,6 +161,7 @@
 			// rbServo5
 			// 
 			this.rbServo5.AutoSize = true;
+			this.rbServo5.Enabled = false;
 			this.rbServo5.Location = new System.Drawing.Point(406, 258);
 			this.rbServo5.Name = "rbServo5";
 			this.rbServo5.Size = new System.Drawing.Size(62, 17);
@@ -173,6 +174,7 @@
 			// rbServo4
 			// 
 			this.rbServo4.AutoSize = true;
+			this.rbServo4.Enabled = false;
 			this.rbServo4.Location = new System.Drawing.Point(406, 281);
 			this.rbServo4.Name = "rbServo4";
 			this.rbServo4.Size = new System.Drawing.Size(62, 17);
@@ -184,6 +186,7 @@
 			// rbServo3
 			// 
 			this.rbServo3.AutoSize = true;
+			this.rbServo3.Enabled = false;
 			this.rbServo3.Location = new System.Drawing.Point(406, 304);
 			this.rbServo3.Name = "rbServo3";
 			this.rbServo3.Size = new System.Drawing.Size(62, 17);
@@ -195,6 +198,7 @@
 			// rbServo2
 			// 
 			this.rbServo2.AutoSize = true;
+			this.rbServo2.Enabled = false;
 			this.rbServo2.Location = new System.Drawing.Point(406, 327);
 			this.rbServo2.Name = "rbServo2";
 			this.rbServo2.Size = new System.Drawing.Size(62, 17);
@@ -207,6 +211,7 @@
 			// 
 			this.rbServo1.AutoSize = true;
 			this.rbServo1.Checked = true;
+			this.rbServo1.Enabled = false;
 			this.rbServo1.Location = new System.Drawing.Point(406, 350);
 			this.rbServo1.Name = "rbServo1";
 			this.rbServo1.Size = new System.Drawing.Size(62, 17);

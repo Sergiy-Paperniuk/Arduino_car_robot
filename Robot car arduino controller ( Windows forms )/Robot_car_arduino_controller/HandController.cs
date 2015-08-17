@@ -18,9 +18,15 @@ namespace Robot_car_arduino_controller {
 
 			private int m_currentAngle;
 
-			public Servo( byte number ) {
+			public Servo( byte number, byte minAngle, byte maxAngle ) {
 				Number = number;
+				m_minAngle = minAngle;
+				m_maxAngle = maxAngle;
+
+				m_currentAngle = minAngle;
 			}
+
+			public Servo( byte number ) : this( number, 0, 180 ) { }
 
 			public byte Number { get; private set; }
 
@@ -49,7 +55,7 @@ namespace Robot_car_arduino_controller {
 			public byte[] GetCommand() {
 
 				byte[] result = new byte[]{
-						Convert.ToByte('H'),
+						Convert.ToByte('M'),
 						Number,
 						Convert.ToByte(CurrentAngle)
 					};
@@ -62,10 +68,10 @@ namespace Robot_car_arduino_controller {
 		private readonly Servo[] m_servoes = new Servo[] {
 			new Servo(0),
 			new Servo(1),
-			new Servo(2),
+			new Servo(2, 30, 180),
 			new Servo(3),
 			new Servo(4),
-			new Servo(5)
+			new Servo(5, 115, 180)
 		};
 
 		public IEnumerable<byte[]> GetCommand() {

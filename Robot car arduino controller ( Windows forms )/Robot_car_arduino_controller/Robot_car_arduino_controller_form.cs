@@ -56,6 +56,7 @@ namespace Robot_car_arduino_controller {
 
 			cbComPorts.Enabled = false;
 			lblComPortsLoading.Visible = true;
+			Open_the_com_port_button.Enabled = false;
 
 			cbComPorts.ValueMember = "Key";
 			cbComPorts.DisplayMember = "Value";
@@ -78,6 +79,7 @@ namespace Robot_car_arduino_controller {
 
 			cbComPorts.Enabled = true;
 			lblComPortsLoading.Visible = false;
+			Open_the_com_port_button.Enabled = true;
 		}
 
 		#endregion  // Application entry point
@@ -211,10 +213,17 @@ namespace Robot_car_arduino_controller {
 			}
 		}
 
-
+		private string m_lastWheelCommand;
 		private void Send_current_joystick_command_to_com_port() {
 
 			string command = Joystick_controller.Get_joystick_command_string();
+
+			if( m_lastWheelCommand == command ) {
+				return;
+			}
+
+			m_lastWheelCommand = command;
+
 			byte[] Command_bytes_array = Encoding.ASCII.GetBytes( command );
 
 			WakePacket packet = new WakePacket() {
@@ -243,8 +252,8 @@ namespace Robot_car_arduino_controller {
 
 				string outputCommand = String.Format(
 					"H {0} {1}",
-					Convert.ToByte( cmd[0] ),
-					Convert.ToByte( cmd[1] )
+					cmd[0],
+					cmd[1]
 				);
 
 				lstHandCommands.Items.Add( outputCommand );
@@ -276,7 +285,7 @@ namespace Robot_car_arduino_controller {
 		#endregion  // Timer tick event. COM port interaction.
 
 		private void Send_one_comand_timer_tick( object sender, EventArgs e ) {
-			//Send_current_joystick_command_to_com_port();
+			Send_current_joystick_command_to_com_port();
 			SendCurrentHandCommandAsync();
 
 			// Turn left

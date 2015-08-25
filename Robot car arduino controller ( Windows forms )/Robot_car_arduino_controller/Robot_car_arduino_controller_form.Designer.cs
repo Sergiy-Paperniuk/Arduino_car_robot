@@ -37,7 +37,6 @@
 			this.Center_the_joystick_on_mouse_up_event_checkbox = new System.Windows.Forms.CheckBox();
 			this.Joystick_current_command_label = new System.Windows.Forms.Label();
 			this.Open_the_com_port_button = new System.Windows.Forms.Button();
-			this.Com_port_name_text_box = new System.Windows.Forms.TextBox();
 			this.COM_port_name_label = new System.Windows.Forms.Label();
 			this.Send_one_comand_timer = new System.Windows.Forms.Timer(this.components);
 			this.rbServo5 = new System.Windows.Forms.RadioButton();
@@ -49,6 +48,8 @@
 			this.tbServo0Value = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.lstHandCommands = new System.Windows.Forms.ListBox();
+			this.cbComPorts = new System.Windows.Forms.ComboBox();
+			this.lblComPortsLoading = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// Joystick_background_panel
@@ -134,14 +135,6 @@
 			this.Open_the_com_port_button.Text = "Open the COM port";
 			this.Open_the_com_port_button.UseVisualStyleBackColor = true;
 			this.Open_the_com_port_button.Click += new System.EventHandler(this.Open_the_com_port_button_Click);
-			// 
-			// Com_port_name_text_box
-			// 
-			this.Com_port_name_text_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.Com_port_name_text_box.Location = new System.Drawing.Point(746, 175);
-			this.Com_port_name_text_box.Name = "Com_port_name_text_box";
-			this.Com_port_name_text_box.Size = new System.Drawing.Size(304, 31);
-			this.Com_port_name_text_box.TabIndex = 7;
 			// 
 			// COM_port_name_label
 			// 
@@ -258,11 +251,31 @@
 			this.lstHandCommands.Size = new System.Drawing.Size(120, 95);
 			this.lstHandCommands.TabIndex = 18;
 			// 
+			// cbComPorts
+			// 
+			this.cbComPorts.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.cbComPorts.FormattingEnabled = true;
+			this.cbComPorts.Location = new System.Drawing.Point(746, 185);
+			this.cbComPorts.Name = "cbComPorts";
+			this.cbComPorts.Size = new System.Drawing.Size(304, 33);
+			this.cbComPorts.TabIndex = 19;
+			// 
+			// lblComPortsLoading
+			// 
+			this.lblComPortsLoading.AutoSize = true;
+			this.lblComPortsLoading.Location = new System.Drawing.Point(916, 150);
+			this.lblComPortsLoading.Name = "lblComPortsLoading";
+			this.lblComPortsLoading.Size = new System.Drawing.Size(50, 13);
+			this.lblComPortsLoading.TabIndex = 20;
+			this.lblComPortsLoading.Text = "loading...";
+			// 
 			// Robot_car_arduino_controller_form
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1072, 409);
+			this.Controls.Add(this.lblComPortsLoading);
+			this.Controls.Add(this.cbComPorts);
 			this.Controls.Add(this.lstHandCommands);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.tbServo0Value);
@@ -273,7 +286,6 @@
 			this.Controls.Add(this.rbServo4);
 			this.Controls.Add(this.rbServo5);
 			this.Controls.Add(this.COM_port_name_label);
-			this.Controls.Add(this.Com_port_name_text_box);
 			this.Controls.Add(this.Open_the_com_port_button);
 			this.Controls.Add(this.Joystick_current_command_label);
 			this.Controls.Add(this.Center_the_joystick_on_mouse_up_event_checkbox);
@@ -307,7 +319,6 @@
         private System.Windows.Forms.CheckBox Center_the_joystick_on_mouse_up_event_checkbox;
         private System.Windows.Forms.Label Joystick_current_command_label;
         private System.Windows.Forms.Button Open_the_com_port_button;
-        private System.Windows.Forms.TextBox Com_port_name_text_box;
         private System.Windows.Forms.Label COM_port_name_label;
         private System.Windows.Forms.Timer Send_one_comand_timer;
 		private System.Windows.Forms.RadioButton rbServo5;
@@ -319,5 +330,7 @@
 		private System.Windows.Forms.TextBox tbServo0Value;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox lstHandCommands;
+		private System.Windows.Forms.ComboBox cbComPorts;
+		private System.Windows.Forms.Label lblComPortsLoading;
 	}
 }

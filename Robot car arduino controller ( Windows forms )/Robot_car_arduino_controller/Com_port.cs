@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO.Ports;
-using System.Text;
-using System.Threading;
+using System.Linq;
+using System.Management;
 using System.Threading.Tasks;
+using Robot_car_arduino_controller.Proxies;
 
 namespace Robot_car_arduino_controller {
 	internal sealed class Com_port_class : IDisposable {
@@ -25,7 +27,7 @@ namespace Robot_car_arduino_controller {
 			serialPort.Open();
 		}
 
-		public async Task WriteAsync( byte[] cmd ) {
+		public async Task WriteAsync( WakePacket packet ) {
 
 			if( serialPort == null ) {
 				return;
@@ -40,11 +42,17 @@ namespace Robot_car_arduino_controller {
 							return;
 						}
 
+						byte[] buffer = packet.GetTransferBuffer();
+
+						string hex = BitConverter.ToString( buffer ).Replace( "-", "" );
+
 						serialPort.Write(
-							buffer: cmd,
+							buffer: buffer,
 							offset: 0,
-							count: cmd.Length
+							count: buffer.Length
 						);
+
+
 					}
 				);
 			} catch( Exception ) {
@@ -55,6 +63,37 @@ namespace Robot_car_arduino_controller {
 				throw;
 			}
 		}
+
+		public async static Task<ComPortInfo[]> GetComPorts() {
+
+			ComPortInfo[] comPorts = await Task.Run( () => {
+
+				using( ManagementObjectSearcher searcher = new ManagementObjectSearcher( "SELECT * FROM WIN32_SerialPort" ) ) {
+					IEnumerable<string> portnames = SerialPort
+						.GetPortNames();
+
+					IEnumerable<ManagementBaseObject> ports = searcher
+						.Get()
+						.Cast<ManagementBaseObject>();
+
+					ComPortInfo[]  result = portnames
+						.Join(
+							ports,
+							name => name,
+							port => port["DeviceID"].ToString(),
+							( name, port ) => new ComPortInfo() {
+								Port = name,
+								Caption = ( port["Caption"].ToString() )
+							}
+						)
+						.ToArray();
+
+					return result;
+				}
+			} );
+
+			return comPorts;
+        }
 
 		public void Close() {
 
@@ -82,6 +121,13 @@ namespace Robot_car_arduino_controller {
 			Dispose( true );
 		}
 		#endregion
+
+	}
+
+	internal sealed class ComPortInfo {
+		public string Port { get; set; }
+
+		public string Caption { get; set; }
 
 	}
 }

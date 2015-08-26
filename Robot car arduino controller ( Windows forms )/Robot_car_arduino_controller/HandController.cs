@@ -13,10 +13,10 @@ namespace Robot_car_arduino_controller {
 
 		private sealed class Servo {
 
-			private int m_minAngle = 0;
-			private int m_maxAngle = 180;
+			private byte m_minAngle = 0;
+			private byte m_maxAngle = 180;
 
-			private int m_currentAngle;
+			private byte m_currentAngle;
 
 			public Servo( byte number, byte minAngle, byte maxAngle ) {
 				Number = number;
@@ -30,7 +30,7 @@ namespace Robot_car_arduino_controller {
 
 			public byte Number { get; private set; }
 
-			public int CurrentAngle {
+			public byte CurrentAngle {
 				get {
 					return m_currentAngle;
 				}
@@ -42,11 +42,11 @@ namespace Robot_car_arduino_controller {
 				}
 			}
 
-			public int MinAngle {
+			public byte MinAngle {
 				get { return m_minAngle; }
 			}
 
-			public int MaxAngle {
+			public byte MaxAngle {
 				get { return m_maxAngle; }
 			}
 
@@ -55,9 +55,8 @@ namespace Robot_car_arduino_controller {
 			public byte[] GetCommand() {
 
 				byte[] result = new byte[]{
-						Convert.ToByte('M'),
 						Number,
-						Convert.ToByte(CurrentAngle)
+						CurrentAngle
 					};
 
 				IsChanged = false;
@@ -67,8 +66,8 @@ namespace Robot_car_arduino_controller {
 
 		private readonly Servo[] m_servoes = new Servo[] {
 			new Servo(0),
-			new Servo(1),
-			new Servo(2, 30, 180),
+			new Servo(1, 10, 180),
+			new Servo(2, 60, 180),
 			new Servo(3),
 			new Servo(4),
 			new Servo(5, 115, 180)

@@ -179,7 +179,6 @@ namespace Robot_car_arduino_controller
 
       // Something like: "L00S00"
       string Arduino_robot_car_command =
-        "W" +
         Turn_direction +
         Turn_angle +
         Moving_direction +

@@ -5,15 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Robot_car_arduino_controller.Proxies;
 
 namespace Robot_car_arduino_controller {
 	public partial class Robot_car_arduino_controller_form : Form {
 		#region Class data
 
+		private const string ConnectButtonText = "Open the COM port";
+		private const string DisconnectButtonText = "Close the COM port";
+
 		private readonly Joystick_controller_class Joystick_controller;
 		private readonly HandController m_handController;
 
-		private const string Default_com_port_name = "COM5";
 		private const int Send_command_to_arduino_interval = 10;  // In milliseconds
 
 		private bool Keyboard_key_left_is_pressed;  // Equals "false" by default
@@ -32,8 +35,6 @@ namespace Robot_car_arduino_controller {
 		{
 			InitializeComponent();
 
-			Com_port_name_text_box.Text = Default_com_port_name;
-
 			m_handController = new HandController();
 
 			Joystick_controller = new Joystick_controller_class( Joystick_button );
@@ -47,6 +48,38 @@ namespace Robot_car_arduino_controller {
 			Init_timer();
 
 			m_servoes = new RadioButton[] { rbServo1, rbServo2, rbServo3, rbServo4, rbServo5 };
+
+			InitComPortsAsync();
+		}
+
+		private async void InitComPortsAsync() {
+
+			cbComPorts.Enabled = false;
+			lblComPortsLoading.Visible = true;
+			Open_the_com_port_button.Enabled = false;
+
+			cbComPorts.ValueMember = "Key";
+			cbComPorts.DisplayMember = "Value";
+
+			ComPortInfo[] ports = await Com_port_class.GetComPorts();
+
+			cbComPorts.DataSource = ports
+				.Select( x => new KeyValuePair<string, string>(
+					x.Port,
+					x.Port + " - " + x.Caption
+				) )
+				.ToArray();
+
+			ComPortInfo autoValue = ports
+				.FirstOrDefault( x => x.Caption.Contains( "Arduino" ) );
+
+			if( autoValue != null ) {
+				cbComPorts.SelectedValue = autoValue.Port;
+			}
+
+			cbComPorts.Enabled = true;
+			lblComPortsLoading.Visible = false;
+			Open_the_com_port_button.Enabled = true;
 		}
 
 		#endregion  // Application entry point
@@ -138,7 +171,7 @@ namespace Robot_car_arduino_controller {
 		private async void Open_the_com_port_button_Click( object sender, EventArgs e ) {
 			try {
 				Open_the_com_port_button.Enabled = false;
-				Com_port_name_text_box.Enabled = false;
+				cbComPorts.Enabled = false;
 
 				Joystick_controller.Center_the_joystick();
 				Update_joystick_coordinates_text_on_the_screen();
@@ -146,9 +179,11 @@ namespace Robot_car_arduino_controller {
 				if( Current_com_port != null ) {
 					Current_com_port.Close();
 					Current_com_port = null;
+
+					return;
 				}
 
-				string Com_port_name = Com_port_name_text_box.Text;
+				string Com_port_name = cbComPorts.SelectedValue.ToString();
 
 				Task<Com_port_class> openComPort = new Task<Com_port_class>( () => {
 					return new Com_port_class( Com_port_name );
@@ -158,7 +193,7 @@ namespace Robot_car_arduino_controller {
 
 				Current_com_port = await openComPort;
 
-				MessageBox.Show( "COM port \"" + Com_port_name_text_box.Text + "\" has been opened successfully." );
+				MessageBox.Show( "COM port \"" + Com_port_name + "\" has been opened successfully." );
 			} catch( Exception Ex ) {
 				if( Current_com_port != null ) {
 					Current_com_port.Close();
@@ -168,20 +203,38 @@ namespace Robot_car_arduino_controller {
 				MessageBox.Show( Ex.Message );
 			} finally {
 				Open_the_com_port_button.Enabled = true;
-				Com_port_name_text_box.Enabled = true;
+
+				if( Current_com_port != null ) {
+					Open_the_com_port_button.Text = DisconnectButtonText;
+				} else {
+					Open_the_com_port_button.Text = ConnectButtonText;
+					cbComPorts.Enabled = true;
+				}
 			}
 		}
 
-
+		private string m_lastWheelCommand;
 		private void Send_current_joystick_command_to_com_port() {
 
 			string command = Joystick_controller.Get_joystick_command_string();
+
+			if( m_lastWheelCommand == command ) {
+				return;
+			}
+
+			m_lastWheelCommand = command;
+
 			byte[] Command_bytes_array = Encoding.ASCII.GetBytes( command );
 
-			SendCommandAsync( Command_bytes_array );
+			WakePacket packet = new WakePacket() {
+				Address = 1,
+				Command = 87,
+				Data = Command_bytes_array
+			};
+
+			SendCommandAsync( packet );
 		}
 
-		byte[] lastCommand;
 		private void SendCurrentHandCommandAsync() {
 			if( lstHandCommands.Items.Count > 6 ) {
 				lstHandCommands.Items.Clear();
@@ -189,33 +242,33 @@ namespace Robot_car_arduino_controller {
 
 			IEnumerable<byte[]> commands = m_handController.GetCommand();
 
-			if( !commands.Any() ) {
-				SendCommandAsync( lastCommand );
-				return;
-			}
-
 			foreach( byte[] cmd in commands ) {
+
+				WakePacket packet = new WakePacket() {
+					Address = 1,
+					Command = 77,
+					Data = cmd
+				};
 
 				string outputCommand = String.Format(
 					"H {0} {1}",
-					Convert.ToByte( cmd[1] ),
-					Convert.ToByte( cmd[2] )
+					cmd[0],
+					cmd[1]
 				);
 
 				lstHandCommands.Items.Add( outputCommand );
-				SendCommandAsync( cmd );
-				lastCommand = cmd;
+				SendCommandAsync( packet );
 			}
 		}
 
-		private async void SendCommandAsync( byte[] command ) {
-			if( Current_com_port == null || command == null ) {
+		private async void SendCommandAsync( WakePacket packet ) {
+			if( Current_com_port == null || packet == null ) {
 				return;
 			}
 
 			try {
-				await Current_com_port.WriteAsync( command );
 
+				await Current_com_port.WriteAsync( packet );
 
 			} catch( TaskCanceledException ) {
 				//ignore
@@ -232,7 +285,7 @@ namespace Robot_car_arduino_controller {
 		#endregion  // Timer tick event. COM port interaction.
 
 		private void Send_one_comand_timer_tick( object sender, EventArgs e ) {
-			//Send_current_joystick_command_to_com_port();
+			Send_current_joystick_command_to_com_port();
 			SendCurrentHandCommandAsync();
 
 			// Turn left

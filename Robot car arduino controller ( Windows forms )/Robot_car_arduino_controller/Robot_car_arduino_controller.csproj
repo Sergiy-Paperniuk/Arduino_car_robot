@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +48,9 @@
     <Compile Include="Com_port.cs" />
     <Compile Include="HandController.cs" />
     <Compile Include="Joystick_controller_class.cs" />
+    <Compile Include="Proxies\Constants.cs" />
+    <Compile Include="Proxies\RxState.cs" />
+    <Compile Include="Proxies\WakePacket.cs" />
     <Compile Include="Robot_car_arduino_controller_form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +85,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

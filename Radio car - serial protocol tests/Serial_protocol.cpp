@@ -4,128 +4,87 @@
 
 #include "Serial_protocol.h"
 
-const uint8_t COMMAND_BUFFER_SIZE = 64;
-static uint8_t Command_buffer[COMMAND_BUFFER_SIZE];
-static uint8_t Checksum;
-static uint8_t Command_type_ID = 0;
-
-void Execute_command( uint8_t Command_type_ID );  // Forward declaration
-
-uint8_t Read_one_byte()
+Serial_protocol_class::Serial_protocol_class()  // Constructor
 {
-  return 99;
+  State = IDLE;
 }
 
-enum MSP_protocol_bytes
+void Serial_protocol_class::Handle_one_byte( uint8_t Incomming_byte )
 {
-  IDLE,
-  HEADER_START,
-  HEADER_M,
-  HEADER_ARROW,
-  HEADER_SIZE,
-  HEADER_COMMAND_TYPE_ID
-};
-
-static MSP_protocol_bytes state = IDLE;
-
-void Execute_next_command()
-{
-  uint8_t Incomming_byte;
-  uint8_t cc;
-
-  static uint8_t Command_buffer_offset;
-  static uint8_t dataSize;
-
-  Incomming_byte = Read_one_byte();
-
-  // "$M<" - valid packet start
-  if( state == IDLE )
+  // "$M<" - valid packet beginning
+  switch( State )
   {
-    if( Incomming_byte == '$' )  // Packet starts from the '$' byte
-    {
-      state = HEADER_START;
-    }
-  }
-  else
-  {
-    if( state == HEADER_START )
-    {
+    case IDLE:
+      if( Incomming_byte == '$' )  // Packet starts from the '$' byte
+      {
+        State = HEADER_START;
+      }
+    break;
+
+    case HEADER_START:
       if( Incomming_byte == 'M' )
       {
-        state = HEADER_M;
+        State = HEADER_M;
       }
       else
       {
-        state = IDLE;  // It's not 'M' - skip this byte
+        State = IDLE;  // It's not 'M' - skip this byte
       }
-    }
-    else
-    {
-      if( state == HEADER_M )
+    break;
+
+    case HEADER_M:
+      if( Incomming_byte == '<' )
       {
-        if( Incomming_byte == '<' )
-        {
-          state = HEADER_ARROW;
-        }
-        else
-        {
-          state = IDLE;  // It's not '<' - skip this byte
-        }
+        State = HEADER_ARROW;
       }
       else
       {
-        if( state == HEADER_ARROW )
-        {
-          if( Incomming_byte > COMMAND_BUFFER_SIZE )  // Command size is too big (Command size > 64 bytes) ---> Error
-          {
-            state = IDLE;
-            return;
-          }
-
-          dataSize = Incomming_byte;
-          Checksum = Incomming_byte;  // Init checksum
-          Command_buffer_offset = 0;  // Init command buffer offset
-
-          state = HEADER_SIZE;
-        }
-        else
-        {
-          if( state == HEADER_SIZE )
-          {
-            Command_type_ID = Incomming_byte;  // Read the command type ID
-            Checksum ^= Incomming_byte;  // Update checksum  ( XOR )
-
-            state = HEADER_COMMAND_TYPE_ID;
-          }
-          else
-          {
-            if( state == HEADER_COMMAND_TYPE_ID )
-            {
-              if( Command_buffer_offset < dataSize )
-              {
-                Checksum ^= Incomming_byte;  // Update checksum  ( XOR )
-                Command_buffer[ Command_buffer_offset ] = Incomming_byte;  // Copy one byte to the command buffer
-                Command_buffer_offset++;
-              }
-              else
-              {
-                if( Checksum == Incomming_byte )  // The last packet byte is a checksum. Compare calculated and transferred checksum.
-                {
-                  Execute_command( Command_type_ID );  // The checksum is OK. We got a valid command. Execute it.
-                }
-
-                state = IDLE;
-                cc = 0;  // no more than one MSP per port and per cycle
-              }
-            }
-          }
-        }
+        State = IDLE;  // It's not '<' - skip this byte
       }
-    }
+    break;
+
+    case HEADER_ARROW:
+      if( Incomming_byte > COMMAND_BUFFER_SIZE )  // Command size is too big (Command size > 64 bytes) ---> Error
+      {
+        State = IDLE;
+        return;
+      }
+
+      Command_size = Incomming_byte;
+      Checksum = Incomming_byte;  // Init checksum
+      Command_buffer_offset = 0;  // Init command buffer offset
+
+      State = HEADER_SIZE;
+    break;
+
+    case HEADER_SIZE:
+      Command_type_ID = Incomming_byte;  // Read the command type ID
+      Checksum ^= Incomming_byte;  // Update checksum  ( XOR )
+
+      State = HEADER_COMMAND_TYPE_ID;
+    break;
+
+    case HEADER_COMMAND_TYPE_ID:
+      if( Command_buffer_offset < Command_size )  // Continue readding command bytes
+      {
+        Checksum ^= Incomming_byte;  // Update checksum  ( XOR )
+        Command_buffer[Command_buffer_offset] = Incomming_byte;  // Copy one byte to the command buffer
+        Command_buffer_offset++;
+      }
+      else
+      {
+        if( Checksum == Incomming_byte )  // The last packet byte is a checksum. Compare calculated and transferred checksum.
+        {
+          Execute_command( Command_size, Command_type_ID );  // The checksum is OK. We got a valid command. Execute it.
+        }
+
+        State = IDLE;  // Wait for the next packet
+      }
+    break;
   }
 }
 
-void Execute_command( uint8_t Command_type_ID )
+void Serial_protocol_class::Execute_command( uint8_t Command_size, uint8_t Command_type_ID )
 {
   return;
 }

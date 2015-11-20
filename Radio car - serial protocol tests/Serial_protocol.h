@@ -17,7 +17,10 @@ class Serial_protocol_class
     Serial_protocol_class();  // Constructor
 
     void Handle_one_byte( uint8_t Incomming_byte );
-    void Execute_command( uint8_t Command_size, uint8_t Command_type_ID );
+
+    void Execute_command( uint8_t* Command_buffer_POINTER,  // 64 bytes buffer POINTER
+                          uint8_t Command_size,
+                          uint8_t Command_type_ID );
 
   public:  // Data
     static const uint8_t COMMAND_BUFFER_SIZE = 64;

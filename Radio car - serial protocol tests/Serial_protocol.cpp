@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "stdint.h"
+#include "stdint.h"  // Defines uint8_t
 
 #include "Serial_protocol.h"
 
@@ -75,7 +75,7 @@ void Serial_protocol_class::Handle_one_byte( uint8_t Incomming_byte )
       {
         if( Checksum == Incomming_byte )  // The last packet byte is a checksum. Compare calculated and transferred checksum.
         {
-          Execute_command( Command_size, Command_type_ID );  // The checksum is OK. We got a valid command. Execute it.
+          Execute_command( Command_buffer, Command_size, Command_type_ID );  // The checksum is OK. We got a valid command. Execute it.
         }
 
         State = IDLE;  // Wait for the next packet
@@ -84,7 +84,11 @@ void Serial_protocol_class::Handle_one_byte( uint8_t Incomming_byte )
   }
 }
 
-void Serial_protocol_class::Execute_command( uint8_t Command_size, uint8_t Command_type_ID )
+void
+Serial_protocol_class::
+Execute_command( uint8_t* Command_buffer_POINTER,  // 64 bytes buffer POINTER
+                 uint8_t Command_size,
+                 uint8_t Command_type_ID )
 {
   return;
 }

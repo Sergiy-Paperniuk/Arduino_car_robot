@@ -1,6 +1,10 @@
-#include "stdafx.h"
+#include "Serial_protocol.h"
 
-#include "stdint.h"  // Defines uint8_t
+#include "Rover_driving_message_handler.h"
+#include "Robotic_arm_message_handler.h"
+
+using namespace Rover_driving_message_handler;
+using namespace Robotic_arm_message_handler;
 
 #include "Serial_protocol.h"
 
@@ -90,5 +94,68 @@ Handle_message( uint8_t* Message_buffer_POINTER,  // 64 bytes buffer POINTER
                 uint8_t Message_size,
                 uint8_t Message_type_ID )
 {
-  return;
+  switch( Message_type_ID )
+  {
+    case ROVER_DRIVING_MESSAGE_TYPE_ID:
+
+    break;
+
+    case ROBOTIC_ARM_MESSAGE_TYPE_ID:
+
+    break;
+
+    default:
+      // Error. Wrong command type ID.
+    break;
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 // The source code is from here: http://www.hackersdelight.org/hdcodetxt/crc.c.txt
 
-unsigned long GetCRC32( unsigned char* Buffer, size_t size ) 
+unsigned long GetCRC32( unsigned char* Buffer, unsigned long size )
 {
    unsigned long Single_byte;
    unsigned long CRC32; 

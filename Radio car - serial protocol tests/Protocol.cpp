@@ -46,7 +46,7 @@ uint8_t Read_one_byte_for_test_2()
   return Outcomming_byte;
 }
 
-void Test_1()  // Handle simple rover command
+void Test_1()  // Handle simple rover driving message
 {
   Current_byte_number = 0;
 
@@ -57,7 +57,7 @@ void Test_1()  // Handle simple rover command
   }
 }
 
-void Test_2()  // Test 2 - Handle command with zero length
+void Test_2()  // Test 2 - Handle message with zero length
 {
   Current_byte_number = 0;
 

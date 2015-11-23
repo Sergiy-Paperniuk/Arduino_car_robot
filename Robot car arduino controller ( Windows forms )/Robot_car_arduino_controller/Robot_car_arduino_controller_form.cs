@@ -213,10 +213,10 @@ namespace Robot_car_arduino_controller {
 			}
 		}
 
-		private string m_lastWheelCommand;
+		private byte[] m_lastWheelCommand;
 		private void Send_current_joystick_command_to_com_port() {
 
-			string command = Joystick_controller.Get_joystick_command_string();
+      byte[] command = Joystick_controller.Get_joystick_command_string();
 
 			if( m_lastWheelCommand == command ) {
 				return;
@@ -224,15 +224,13 @@ namespace Robot_car_arduino_controller {
 
 			m_lastWheelCommand = command;
 
-			byte[] Command_bytes_array = Encoding.ASCII.GetBytes( command );
+      // WakePacket packet = new WakePacket() {
+      //   Address = 1,
+      //   Command = 87,
+      //   Data = Command_bytes_array
+      // };
 
-			WakePacket packet = new WakePacket() {
-				Address = 1,
-				Command = 87,
-				Data = Command_bytes_array
-			};
-
-			SendCommandAsync( packet );
+      SendCommandAsync( command );
 		}
 
 		private void SendCurrentHandCommandAsync() {
@@ -257,11 +255,12 @@ namespace Robot_car_arduino_controller {
 				);
 
 				lstHandCommands.Items.Add( outputCommand );
-				SendCommandAsync( packet );
+				// SendCommandAsync( packet );  // Temporary disabled
 			}
 		}
 
-		private async void SendCommandAsync( WakePacket packet ) {
+    private async void SendCommandAsync( byte[] packet )
+    {
 			if( Current_com_port == null || packet == null ) {
 				return;
 			}

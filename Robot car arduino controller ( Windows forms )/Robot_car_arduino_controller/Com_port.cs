@@ -27,7 +27,7 @@ namespace Robot_car_arduino_controller {
 			serialPort.Open();
 		}
 
-		public async Task WriteAsync( WakePacket packet ) {
+		public async Task WriteAsync( byte[] packet ) {
 
 			if( serialPort == null ) {
 				return;
@@ -42,7 +42,7 @@ namespace Robot_car_arduino_controller {
 							return;
 						}
 
-						byte[] buffer = packet.GetTransferBuffer();
+						byte[] buffer = packet;
 
 						string hex = BitConverter.ToString( buffer ).Replace( "-", "" );
 
@@ -51,8 +51,6 @@ namespace Robot_car_arduino_controller {
 							offset: 0,
 							count: buffer.Length
 						);
-
-
 					}
 				);
 			} catch( Exception ) {

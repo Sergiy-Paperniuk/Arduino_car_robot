@@ -1,6 +1,20 @@
 #ifndef SERIAL_PROTOCOL_INCLUDE_GUARD
 #define SERIAL_PROTOCOL_INCLUDE_GUARD
 
+#include "stdint.h"  // Defines uint8_t
+
+// Serial protocol packet structure:
+//
+// Byte 0 - '$',   // Packet beginning first byte
+// Byte 1 - 'M',   // Packet beginning second byte
+// Byte 2 - '<',   // ('<' - to Aduino) - ('>' - from Adruino)
+// Byte 3 - 3      // Message length in bytes
+// Byte 4 - 0      // Message type ID ( 0 - Rover / 1 - Arm )
+// Byte 5 - 0      // Message byte 0  |
+// Byte 6 - 10,    // Message byte 1  | - Internal message bytes
+// Byte 7 - 45,    // Message byte 2  |
+// Byte 8 - 37 };  // Checksum (XOR) from: ( Message length + Message type ID + Message body )
+
 enum MSP_protocol_bytes
 {
   IDLE,

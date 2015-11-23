@@ -8,7 +8,7 @@ unsigned long GetCRC32( unsigned char* Buffer, unsigned long size )
   
    CRC32 = 0xFFFFFFFF;
    
-   for( int i = 0; i < size; i++)
+   for( int i = 0; i < size; i++ )
    {
       Single_byte = Buffer[i];  // Get the next byte
       CRC32 = CRC32 ^ Single_byte;

@@ -21,16 +21,14 @@ namespace Rover_driving_message_handler
 
   // Turn constants -------------------------------------------------------------------------------------------------------
   // 0 - Max right    180 - Max left 
-  const int SERVO_ABSOLUTE_CENTER_ANGLE = 102;  // [0..180]  Degrees
+  const int SERVO_CENTER_ANGLE = 102;  // [0..180]  Degrees
 
-  const int SERVO_MAX_LEFT_ANGLE_SHIFT_FROM_THE_CENTER = 54;  // Degrees
-  const int SERVO_MAX_RIGHT_ANGLE_SHIFT_FROM_THE_CENTER = 48;  // Degrees
-
-  const int SERVO_ABSOLUTE_MIN_ANGLE = 54; // Degrees
-  const int SERVO_ABSOLUTE_MAX_ANGLE = 156 // Degrees
+  const int SERVO_MIN_ANGLE = 54; // Degrees
+  const int SERVO_MAX_ANGLE = 156; // Degrees
+  
   // Drive constants ------------------------------------------------------------------------------------------------------
-  // MAX rorot speed threshold
-  const int ABSOLUTE_MAX_SPEED = 255; // [0..255]            
+  // MAX rover speed threshold
+  const int MAX_ROVER_SPEED = 255;  // [0..255]
   
   // Code -----------------------------------------------------------------------------------------------------------------
   void Handle_rover_driving_message( uint8_t* Message_buffer_POINTER,
@@ -45,12 +43,6 @@ namespace Rover_driving_message_handler
 }
 
 #endif  // ROVER_DRIVING_MESSAGE_HANDLER_INCLUDE_GUARD
-
-
-
-
-
-
 
 
 

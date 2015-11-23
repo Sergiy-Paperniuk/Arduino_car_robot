@@ -4,27 +4,20 @@
 #include "Rover_driving_message_handler.h"
 
 // Pins ---------------------------------------------
-
 const int SERVO_PIN = 12;
 
-const int ENA_PIN = 6;  // PWM ~ only !!!
-const int IN1_PIN = 7;
-const int IN2_PIN = 4;
-
-const int IN3_PIN = 3;
-const int IN4_PIN = 2;
-const int ENB_PIN = 5;  // PWM ~ only !!!
+int ENA_PIN = 6;  // PWM ~ only !!!
+int IN1_PIN = 7;
+int IN2_PIN = 4;
 
 const int LED_PIN = 13;
 
-//---------------------------------------------------
-
+// Global variables ---------------------------------
+bool An_error_has_occured = false;
 Servo RobotSteeringServo;
-
 Serial_protocol_class Serial_protocol;
 
 // Code ---------------------------------------------
-
 void setup() 
 {
   pinMode( LED_PIN, OUTPUT );
@@ -32,12 +25,9 @@ void setup()
   pinMode( ENA_PIN, OUTPUT );  // PWM ~ only !!!
   pinMode( IN1_PIN, OUTPUT );
   pinMode( IN2_PIN, OUTPUT );
-  pinMode( IN3_PIN, OUTPUT );
-  pinMode( IN4_PIN, OUTPUT );
-  pinMode( ENB_PIN, OUTPUT );  // PWM ~ only !!!
 
   RobotSteeringServo.attach( SERVO_PIN );
-  RobotSteeringServo.write( Rover_driving_message_handler::SERVO_ABSOLUTE_CENTER_ANGLE );
+  RobotSteeringServo.write( Rover_driving_message_handler::SERVO_CENTER_ANGLE );
   
   Serial.begin( 9600 );
 }
@@ -52,6 +42,7 @@ void loop()
   }
 }
 
+// These functions are for debug
 void LED_blink()
 {
   digitalWrite( LED_PIN, HIGH );
@@ -68,7 +59,40 @@ void LED_blink( unsigned int Number_of_blinks )
   {
     LED_blink();
   }
+
+  delay( 1000 );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

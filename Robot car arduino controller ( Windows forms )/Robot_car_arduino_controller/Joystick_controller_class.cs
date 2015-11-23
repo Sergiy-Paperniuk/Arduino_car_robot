@@ -154,35 +154,41 @@ namespace Robot_car_arduino_controller
       Joystick_button.Top = New_top;
     }
 
-    public string Get_joystick_command_string()
+    public byte[] Get_joystick_command_string()
     {
-      string Moving_speed = Math.Abs( Joystick_Y ).ToString( "00" );
-      string Moving_direction = "S";  // Stop
+      byte Moving_speed = (byte)(Math.Abs( Joystick_Y ) * 2);
+      byte Moving_direction = 0;  // Stop
 
       if( Joystick_Y < 0 )
       {
-        Moving_direction = "F";  // Forward
+        Moving_direction = 1;  // Forward
       }
 
       if( Joystick_Y > 0 )
       {
-        Moving_direction = "B";  // Backward
+        Moving_direction = 2;  // Backward
       }
 
-      string Turn_angle = Math.Abs( Joystick_X ).ToString( "00" );
-      string Turn_direction = "L";  // Left
-
-      if( Joystick_X > 0 )
-      {
-        Turn_direction = "R";  // Right
-      }
+      byte Turn_angle = (byte)(Math.Abs( Joystick_X ) + 90);
 
       // Something like: "L00S00"
-      string Arduino_robot_car_command =
-        Turn_direction +
-        Turn_angle +
-        Moving_direction +
-        Moving_speed;
+      byte[] Arduino_robot_car_command = new byte[]{ 0x24,  // '$'
+                                                     0x4D,  // 'M'
+                                                     0x3C,  // '<'
+                                                     0x03,  // 3 bytes
+                                                     0x00,  // Message type = Rover driving
+                                                     Moving_direction,
+                                                     Moving_speed,
+                                                     Turn_angle,
+                                                     0x0 };
+
+      // Calculate checksum (XOR):
+      Arduino_robot_car_command[8] =
+        (byte)(Arduino_robot_car_command[3] ^
+               Arduino_robot_car_command[4] ^
+               Arduino_robot_car_command[5] ^
+               Arduino_robot_car_command[6] ^
+               Arduino_robot_car_command[7]);
 
       return Arduino_robot_car_command;
     }

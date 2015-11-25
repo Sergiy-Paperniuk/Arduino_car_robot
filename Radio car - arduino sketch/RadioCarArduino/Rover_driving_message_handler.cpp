@@ -9,6 +9,9 @@ using namespace Rover_driving_message_handler;
 extern int ENA_PIN;  // PWM ~ only !!!
 extern int IN1_PIN;
 extern int IN2_PIN;
+
+extern int LED_PIN;
+
 extern Servo RobotSteeringServo;
 extern bool An_error_has_occured;
 void LED_blink( unsigned int Number_of_blinks );  // Debug
@@ -44,8 +47,7 @@ Turn( bool* An_error_has_occured_POINTER,
     }
   }
 
-  // LED_blink(4);  // Debug
-  
+
   // Servo angle: the value to write to the servo, int - from 0 to 180    
   // 0 - Max right    180 - Max left 
   RobotSteeringServo.write( (int)Servo_turn_angle );
@@ -71,7 +73,8 @@ Drive( bool* An_error_has_occured_POINTER,
      analogWrite( ENA_PIN, (int)Rover_speed );  // PWM - Speed [0..255]
      digitalWrite( IN1_PIN, LOW );
      digitalWrite( IN2_PIN, HIGH );
-     // LED_blink(1);  // Debug
+
+     digitalWrite( LED_PIN, HIGH );  // Debug
    break;
   
    case ROVER_DRIVING_COMMAND_BACKWARD :
@@ -79,7 +82,8 @@ Drive( bool* An_error_has_occured_POINTER,
      analogWrite( ENA_PIN, (int)Rover_speed );  // PWM - Speed [0..255]
      digitalWrite( IN1_PIN, HIGH );
      digitalWrite( IN2_PIN, LOW );
-     // LED_blink(2);  // Debug
+
+     digitalWrite( LED_PIN, LOW );  // Debug
    break;
 
    case ROVER_DRIVING_COMMAND_STOP :
@@ -87,7 +91,6 @@ Drive( bool* An_error_has_occured_POINTER,
      analogWrite( ENA_PIN, 0 );  // PWM - Speed [0..255]
      digitalWrite( IN1_PIN, LOW );
      digitalWrite( IN2_PIN, LOW );
-     // LED_blink(3);  // Debug
    break;  
    
    default :  // Error

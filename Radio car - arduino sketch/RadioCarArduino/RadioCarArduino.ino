@@ -10,7 +10,7 @@ int ENA_PIN = 6;  // PWM ~ only !!!
 int IN1_PIN = 7;
 int IN2_PIN = 4;
 
-const int LED_PIN = 13;
+int LED_PIN = 13;
 
 // Global variables ---------------------------------
 bool An_error_has_occured = false;

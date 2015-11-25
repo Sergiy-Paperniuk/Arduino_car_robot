@@ -1,10 +1,13 @@
 #include "Serial_protocol.h"
+#include "wiring_private.h"
 
 #include "Rover_driving_message_handler.h"
 #include "Robotic_arm_message_handler.h"
 
 using namespace Rover_driving_message_handler;
 using namespace Robotic_arm_message_handler;
+
+extern int LED_PIN;
 
 // Forward declarations
 void LED_blink( unsigned int Number_of_blinks );  // Debug
@@ -16,7 +19,7 @@ Serial_protocol_class::Serial_protocol_class()  // Constructor
 
 void Serial_protocol_class::Handle_one_byte( uint8_t Incomming_byte )
 {
-  // "$M<" - valid packet beginning
+  // "$M" - valid packet beginning
   switch( State )
   {
     case IDLE:
@@ -38,17 +41,6 @@ void Serial_protocol_class::Handle_one_byte( uint8_t Incomming_byte )
     break;
 
     case HEADER_M:
-      if( Incomming_byte == '<' )
-      {
-        State = HEADER_ARROW;
-      }
-      else
-      {
-        State = IDLE;  // It's not '<' - skip this byte
-      }
-    break;
-
-    case HEADER_ARROW:
       if( Incomming_byte > MESSAGE_BUFFER_SIZE )  // Command size is too big (Command size > 64 bytes) ---> Error
       {
         State = IDLE;
@@ -92,8 +84,8 @@ void Serial_protocol_class::Handle_one_byte( uint8_t Incomming_byte )
 void
 Serial_protocol_class::
 Handle_message( uint8_t* Message_buffer_POINTER,  // 64 bytes buffer POINTER
-                 uint8_t Message_size,
-                 uint8_t Message_type_ID )
+                uint8_t Message_size,
+                uint8_t Message_type_ID )
 {
   switch( Message_type_ID )
   {

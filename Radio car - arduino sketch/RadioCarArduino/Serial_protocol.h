@@ -20,7 +20,6 @@ enum MSP_protocol_bytes
   IDLE,
   HEADER_START,
   HEADER_M,
-  HEADER_ARROW,
   HEADER_SIZE,
   HEADER_MESSAGE_TYPE_ID
 };

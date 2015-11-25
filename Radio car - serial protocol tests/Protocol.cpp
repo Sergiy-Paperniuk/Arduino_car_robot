@@ -10,19 +10,18 @@ using namespace Rover_driving_message_handler;
 Serial_protocol_class Serial_protocol;
 
 uint8_t Current_byte_number = 0;
-const uint8_t TEST_PACKET_1_SIZE = 9;
-const uint8_t TEST_PACKET_2_SIZE = 6;
+const uint8_t TEST_PACKET_1_SIZE = 8;
+const uint8_t TEST_PACKET_2_SIZE = 5;
 
 uint8_t Read_one_byte_for_test_1()
 {
   uint8_t Test_packet[ TEST_PACKET_1_SIZE ]{ '$',
                                              'M',  // "$M" - packet beginning
-                                             '<',   // ('<' - to Aduino) - ('>' - from Adruino)
                                              ROVER_DRIVING_MESSAGE_LENGTH,  // = 3
                                              ROVER_DRIVING_MESSAGE_TYPE_ID,  // Message type ID ( 0 - Rover / 1 - Arm )
-                                             ROVER_DRIVING_COMMAND_FORWARD_RIGHT,  // Rover command      |
-                                             10,    // Rover speed - [0..255]                            | - Rover driving message = 3 bytes
-                                             45,    // Rover turn angle [ 0..90 ] degrees                |
+                                             ROVER_DRIVING_COMMAND_FORWARD,  // Rover command    |
+                                             10,    // Rover speed - [0..255]                    | - Rover driving message = 3 bytes
+                                             45,    // Rover turn angle [ 0..90 ] degrees        |
                                              37 };  // Checksum (XOR) from: ( Message length + Message type ID + Message body )
 
   uint8_t Outcomming_byte = Test_packet[ Current_byte_number ];
@@ -35,7 +34,6 @@ uint8_t Read_one_byte_for_test_2()
 {
   uint8_t Test_paket_2[ TEST_PACKET_2_SIZE ]{ '$',
                                               'M',  // "$M" - packet beginning
-                                              '<',  // ('<' - to Aduino) - ('>' - from Adruino)
                                               0,    // Message length
                                               2,    // Message type ID ( 0 - Rover / 1 - Arm )
                                               2 };  // Checksum (XOR) from: ( Message length + Message type ID + Message body )

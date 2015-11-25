@@ -174,21 +174,19 @@ namespace Robot_car_arduino_controller
       // Something like: "L00S00"
       byte[] Arduino_robot_car_command = new byte[]{ 0x24,  // '$'
                                                      0x4D,  // 'M'
-                                                     0x3C,  // '<'
                                                      0x03,  // 3 bytes
                                                      0x00,  // Message type = Rover driving
                                                      Moving_direction,
                                                      Moving_speed,
                                                      Turn_angle,
-                                                     0x0 };
-
+                                                     0x0 };  // Checksum (XOR)
       // Calculate checksum (XOR):
-      Arduino_robot_car_command[8] =
-        (byte)(Arduino_robot_car_command[3] ^
+      Arduino_robot_car_command[7] =
+        (byte)(Arduino_robot_car_command[2] ^ 
+               Arduino_robot_car_command[3] ^
                Arduino_robot_car_command[4] ^
                Arduino_robot_car_command[5] ^
-               Arduino_robot_car_command[6] ^
-               Arduino_robot_car_command[7]);
+               Arduino_robot_car_command[6]);
 
       return Arduino_robot_car_command;
     }

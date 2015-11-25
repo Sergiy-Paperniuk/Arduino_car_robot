@@ -183,9 +183,10 @@ namespace Robot_car_arduino_controller {
 					return;
 				}
 
-				string Com_port_name = cbComPorts.SelectedValue.ToString();
+                // string Com_port_name = cbComPorts.SelectedValue.ToString();
+			    string Com_port_name = "COM2";
 
-				Task<Com_port_class> openComPort = new Task<Com_port_class>( () => {
+                Task<Com_port_class> openComPort = new Task<Com_port_class>( () => {
 					return new Com_port_class( Com_port_name );
 				} );
 

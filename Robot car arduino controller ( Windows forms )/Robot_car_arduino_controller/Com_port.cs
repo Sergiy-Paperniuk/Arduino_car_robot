@@ -17,7 +17,7 @@ namespace Robot_car_arduino_controller
             // Create the serial port with basic settings
 
             // serialPort = new SerialPort( portName: "Port_name",
-            serialPort = new SerialPort( portName: "COM6",  // Temborary hardcoded
+            serialPort = new SerialPort( portName: "COM2",  // Temborary hardcoded
                                          baudRate: 9600,
                                          parity: Parity.None,
                                          dataBits: 8,
@@ -54,7 +54,8 @@ namespace Robot_car_arduino_controller
 
                         byte[] buffer = packet;
 
-                        string hex = BitConverter.ToString( buffer ).Replace( "-", "" );
+                        // To see the command in hex mode for debugging
+                        string Hex = BitConverter.ToString( buffer ).Replace( "-", "" );
 
                         serialPort.Write(
                             buffer: buffer,

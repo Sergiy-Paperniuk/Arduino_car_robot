@@ -25,24 +25,24 @@ namespace Robot_car_arduino_controller
       Center_the_joystick();
     }
 
-    // [ -99 .. +99 ]
+    // [ -255 .. +255 ]
     public int Joystick_X
     {
       get
       {
         int X = Joystick_button.Location.X - Joystick_center_X;
 
-        X = (int)( (float)X / 150 * 100 );
+        X = (int)( (float)X / 150 * 255 );
 
-        if( X < -99 )
+        if( X < -255 )
         {
-          X = -99;
+          X = -255;
         }
         else
         {
-          if( X > 99 )
+          if( X > 255 )
           {
-            X = 99;
+            X = 255;
           }
         }
 
@@ -50,24 +50,24 @@ namespace Robot_car_arduino_controller
       }
     }
 
-    // [ -99 .. +99 ]
+    // [ -255 .. +255 ]
     public int Joystick_Y
     {
       get
       {
         int Y = Joystick_button.Location.Y - Joystick_center_Y;
 
-        Y = (int)( (float)Y / 150 * 100 );
+        Y = (int)( (float)Y / 150 * 255 );
 
-        if( Y < -99 )
+        if( Y < -255 )
         {
-          Y = -99;
+          Y = -255;
         }
         else
         {
-          if( Y > 99 )
+          if( Y > 255 )
           {
-            Y = 99;
+            Y = 255;
           }
         }
 
@@ -154,41 +154,72 @@ namespace Robot_car_arduino_controller
       Joystick_button.Top = New_top;
     }
 
-    public byte[] Get_joystick_command_string()
+
+    private byte Get_rover_turn_angle()  //  [0..180]
     {
-      byte Moving_speed = (byte)(Math.Abs( Joystick_Y ) * 2);
-      byte Moving_direction = 0;  // Stop
+      const long MIN_TURN_ANGLE = 0;
+      const long MAX_TURN_ANGLE = 180;
+
+      long Turn_angle = Joystick_X + 255;  // [0..510]
+
+      Turn_angle = (Turn_angle * 180) / 510;  // [0..180]
+
+      if( Turn_angle < MIN_TURN_ANGLE )
+      {
+        Turn_angle = MIN_TURN_ANGLE;
+      }
+      else
+      {
+        if( Turn_angle > MAX_TURN_ANGLE )
+        {
+          Turn_angle = MAX_TURN_ANGLE;
+        }
+      }
+
+      return (byte)Turn_angle;  // [MIN_TURN_ANGLE..MAX_TURN_ANGLE] == [0..180]
+    }
+
+    public byte[] Get_rover_driving_command_bytes_array()
+    {
+      const byte STOP = 0;
+      const byte FORWARD = 1;
+      const byte BACKWARD = 2;
+
+      byte Moving_speed = (byte)(Math.Abs( Joystick_Y ));  // [0..255]
+      byte Moving_direction = STOP;  // 0
 
       if( Joystick_Y < 0 )
       {
-        Moving_direction = 1;  // Forward
+        Moving_direction = FORWARD;  // 1
       }
 
       if( Joystick_Y > 0 )
       {
-        Moving_direction = 2;  // Backward
+        Moving_direction = BACKWARD;  // 2
       }
 
-      byte Turn_angle = (byte)(Math.Abs( Joystick_X ) + 90);
+      byte Turn_angle = Get_rover_turn_angle();  // [0..180]
 
-      // Something like: "L00S00"
-      byte[] Arduino_robot_car_command = new byte[]{ 0x24,  // '$'
-                                                     0x4D,  // 'M'
-                                                     0x03,  // 3 bytes
-                                                     0x00,  // Message type = Rover driving
-                                                     Moving_direction,
-                                                     Moving_speed,
-                                                     Turn_angle,
-                                                     0x0 };  // Checksum (XOR)
-      // Calculate checksum (XOR):
-      Arduino_robot_car_command[7] =
-        (byte)(Arduino_robot_car_command[2] ^ 
-               Arduino_robot_car_command[3] ^
-               Arduino_robot_car_command[4] ^
-               Arduino_robot_car_command[5] ^
-               Arduino_robot_car_command[6]);
+      byte[] Rover_driving_command = { /* 0 */ 0x24,  // '$'
+                                       /* 1 */ 0x4D,  // 'M'
+                                       /* 2 */ 0x03,  // 3 bytes
+                                       /* 3 */ 0x00,  // Message type = Rover driving
+                                       /* 4 */ Moving_direction,
+                                       /* 5 */ Moving_speed,
+                                       /* 6 */ Turn_angle,
+                                       /* 7 */ 0x0 };  // Checksum (XOR)
 
-      return Arduino_robot_car_command;
+      // Calculate checksum (XOR) from bytes [2..6]
+      byte checksum = 0;
+
+      for( byte i = 2; i < 7; i++ )  // [2..6]
+      {
+        checksum ^= Rover_driving_command[i];  // XOR
+      }
+
+      Rover_driving_command[7] = checksum;  // Save checksum
+
+      return Rover_driving_command;
     }
   }
 }

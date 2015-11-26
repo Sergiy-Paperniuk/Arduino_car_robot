@@ -91,6 +91,8 @@ Drive( bool* An_error_has_occured_POINTER,
      analogWrite( ENA_PIN, 0 );  // PWM - Speed [0..255]
      digitalWrite( IN1_PIN, LOW );
      digitalWrite( IN2_PIN, LOW );
+
+     digitalWrite( LED_PIN, LOW );  // Debug
    break;  
    
    default :  // Error

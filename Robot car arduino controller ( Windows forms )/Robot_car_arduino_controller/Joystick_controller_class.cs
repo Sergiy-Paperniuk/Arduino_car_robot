@@ -160,7 +160,7 @@ namespace Robot_car_arduino_controller
       const long MIN_TURN_ANGLE = 0;
       const long MAX_TURN_ANGLE = 180;
 
-      long Turn_angle = Joystick_X + 255;  // [0..510]
+      long Turn_angle = 255 - Joystick_X;  // [0..510]
 
       Turn_angle = (Turn_angle * 180) / 510;  // [0..180]
 

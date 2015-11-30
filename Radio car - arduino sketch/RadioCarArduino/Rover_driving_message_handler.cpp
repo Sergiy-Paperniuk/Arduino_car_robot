@@ -31,8 +31,7 @@ Rover_driving_message_handler::
 Turn( bool* An_error_has_occured_POINTER,
       uint8_t* Message_buffer_POINTER )
 {
-  unsigned char Input_turn_angle = Message_buffer_POINTER[ 2 ];
-  unsigned long Servo_turn_angle;
+  unsigned char Servo_turn_angle = Message_buffer_POINTER[ 2 ];
                       
   // MIN and MAX servo angle thresholds
   if( Servo_turn_angle < SERVO_MIN_ANGLE )
@@ -46,7 +45,6 @@ Turn( bool* An_error_has_occured_POINTER,
       Servo_turn_angle = SERVO_MAX_ANGLE;
     }
   }
-
 
   // Servo angle: the value to write to the servo, int - from 0 to 180    
   // 0 - Max right    180 - Max left 

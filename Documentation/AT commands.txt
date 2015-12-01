@@ -1,0 +1,303 @@
+To connect to Wifi module with new firmware:
+
+1) Use "SocketTest3" application
+2) Select the "Clent" tab
+3) IP:192.168.4.1
+4) Port:1336
+5) Press "Connect"
+6) Type the message
+7) Press "Send"
+
+Then you can use "Serial Port Redirector" application to create a 
+virtual COM port to TCP/IP bridge.
+
+
+Wifi module with new firmware AT commands:
++++AT                                    # do nothing, print OK
++++AT MODE                               # print current opmode
++++AT MODE <mode: 1= STA, 2= AP, 3=both> # set current opmode
++++AT STA                                # print current ssid and password connected to
++++AT STA <ssid> <password>              # set ssid and password to connect to
++++AT AP                                 # print the current soft ap settings
++++AT AP <ssid>                          # set the AP as open with specified ssid
++++AT AP <ssid> <pw> [<authmode> [<ch>]]]# set the AP ssid and password, authmode:1= WEP,2= WPA,3= WPA2,4= WPA+WPA2 , channel: 1..13
++++AT BAUD                               # print current UART settings
++++AT BAUD <baud> [data [parity [stop]]] # set current UART baud rate and optional data bits = 5/6/7/8 , parity = N/E/O, stop bits = 1/1.5/2
++++AT PORT                               # print current incoming TCP socket port
++++AT PORT <port>                        # set current incoming TCP socket port (restarts ESP)
++++AT FLASH                              # print current flash settings
++++AT FLASH <1|0>                        # 1: The changed UART settings (++AT BAUD ...) are saved ( Default after boot), 0= no save to flash.
++++AT RESET                              # software reset the unit
++++AT GPIO2 <0|1|2 100>                  # 1: pull GPIO2 pin up (HIGH) 0: pull GPIO2 pin down (LOW) 2: reset GPIO2, where 100 is optional to specify reset delay time in ms (default 100ms)
+
+AT+RST - Reset
+AT+CWMODE? - Get wifi mode
+AT+CWMODE=3 - Enable the module to act as both a “Station” and an “Access Point”:
+AT+GMR - Firmware version
+AT+CWLAP - Get wifi access points
+AT+CIFSR - Get my IP
+AT+CIPSERVER=1,1336 - listen port 1336
+
+AT // проверили работу модуля
+OK
+ 
+AT+GMR // проверили версию прошивки
+AT version:0.22.b1.0
+SDK version:0.9.6(b1)
+OK
+ 
+AT+CWJAP? // проверили подключение к WiFi
+No AP // его нету
+OK
+ 
+AT+CWMODE=1 // перевели в режим Station
+OK
+ 
+AT+CWDHCP=1,1 // включили в режиме Station работу DHCP, а если быть точным, то дали команду ESP получить IP от маршрутизатора
+OK
+AT+CIFSR - get module ip
+
+
+AT+RST - Reset
+
+Get mode:
+AT+CWMODE? returns the Mode of operation of the module.
+CWMODE returns an integer designating the mode of operation either 1, 2, or 3. 
+AT+CWMODE=1 - Station mode (client) 
+AT+CWMODE=2  - AP  mode (host) 
+AT+CWMODE=3  - AP + Station mode (Yes, ESP8266 has a dual mode!)
+
+Get wifi access points:
+AT+CWLAP
+
+
+AT+CWLAP // получаем список AP в пределах видимости
++CWLAP:(3,"тутSSIDмоейточкидоступа",-61,"тутMACмоейточкидоступа",4)
+OK
+ 
+AT+CWJAP="тутSSIDмоейточкидоступа","тутпарольмоейточкидоступа" // подаем команду подключиться к нашей точке
+OK
+ 
+AT+CWJAP? // снова проверили подключение к WiFi
++CWJAP:"тутSSIDмоейточкидоступа" // теперь оно есть
+OK
+ 
+AT+RST // презагружаем модуль, чтобы все закрепить
+OK
+ 
+ets Jan  8 2013,rst cause:4, boot mode:(3,7)
+ 
+wdt reset
+load 0x40100000, len 1320, room 16
+tail 8
+chksum 0xb8
+load 0x3ffe8000, len 776, room 0
+tail 8
+chksum 0xd9
+load 0x3ffe8308, len 412, room 0
+tail 12
+chksum 0xb9
+csum 0xb9
+ 
+2nd boot version : 1.3(b3)
+  SPI Speed      : 40MHz
+  SPI Mode       : QIO
+  SPI Flash Size : 4Mbit
+jump to run user1
+ 
+rlЋя
+ready // вот модуль и перезагрузился
+ 
+AT+CWJAP? // еще раз проверили подключение к WiFi, оно сохранилось и после перезагрузки снова поднялось, автоматом
++CWJAP:"тутSSIDмоейточкидоступа"
+OK
+ 
+AT+CIPSTA? // спрашиваем IP адрес, который наша ESP получила от роутера
++CIPSTA:"192.168.168.7" // а вот и он
+OK
+ 
+// если бы до этого у нас была команда AT+CWDHCP=1,0 - то адрес мы не получали бы от роутера по DHCP, а взяли бы себе сами, попробуем?
+ 
+AT+CWDHCP=1,0 // посылаем команду на отключение режима DHCP
+OK
+ 
+AT+RST // перезагружаем для применения настроек
+OK
+ 
+ets Jan  8 2013,rst cause:4, boot mode:(3,7)
+ 
+wdt reset
+load 0x40100000, len 1320, room 16
+tail 8
+chksum 0xb8
+load 0x3ffe8000, len 776, room 0
+tail 8
+chksum 0xd9
+load 0x3ffe8308, len 412, room 0
+tail 12
+chksum 0xb9
+csum 0xb9
+ 
+2nd boot version : 1.3(b3)
+  SPI Speed      : 40MHz
+  SPI Mode       : QIO
+  SPI Flash Size : 4Mbit
+jump to run user1
+ 
+rlЋя
+ready // модуль перезагрузился и готов
+ 
+AT+CWJAP? // проверяем подключение к WiFi
+No AP // нет подключения, что за фигня?
+OK
+ 
+AT+CWLAP // проверяем доступные точки
++CWLAP:(3,"тутSSIDмоейточкидоступа",-61,"тутMACмоейточкидоступа",4) // есть наша точка, так в чем же дело?
+OK
+ 
+AT+CWJAP="тутSSIDмоейточкидоступа","тутпарольмоейточкидоступа" // пробуем к ней подключиться
++CWJAP:1
+FAIL // фейл, с чего вдруг?
+ 
+AT+CIPSTA? // проверяем IP который у нас сохранен в память для самоприсвоения при подключении
++CIPSTA:"0.0.0.0" // вот она где собака порылась, в памяти у нас сохранен IP 0.0.0.0 - он некорректен, а так как мы отключили получение IP от роутера по DHCP, то модуль просто не может подключиться с кривым IP
+OK
+ 
+AT+CIPSTA="192.168.168.91" // назначаем нашему ESP сами IP адрес (лишь бы он был свободен и подходил к нашей сети, у меня сеть 192.168.168.0 - 192.168.168.255)
+OK
+ 
+AT+RST // перезагружаем для применения настроек
+OK
+ 
+ets Jan  8 2013,rst cause:4, boot mode:(3,7)
+ 
+wdt reset
+load 0x40100000, len 1320, room 16
+tail 8
+chksum 0xb8
+load 0x3ffe8000, len 776, room 0
+tail 8
+chksum 0xd9
+load 0x3ffe8308, len 412, room 0
+tail 12
+chksum 0xb9
+csum 0xb9
+ 
+2nd boot version : 1.3(b3)
+  SPI Speed      : 40MHz
+  SPI Mode       : QIO
+  SPI Flash Size : 4Mbit
+jump to run user1
+ 
+rlЋя
+ready // модуль перезагрузился и готов
+ 
+AT+CIPSTA? // проверяем IP который у нас сохранен в память для самоприсвоения при подключении
++CIPSTA:"192.168.168.91" // наши настройки сохранились, хорошо
+OK
+ 
+AT+CWJAP? // проверяем подключение к WiFi
++CWJAP:"тутSSIDмоейточкидоступа" // опа, оно поднялось само, теперь конфликта IP нет
+OK
+ 
+// далее можно по пинговать модуль с чего-то в этой же сети, например, с ПК из командной строки cmd
+C:\Windows\System32>ping 192.168.168.91
+ 
+Обмен пакетами с 192.168.168.91 по с 32 байтами данных:
+Ответ от 192.168.168.91: число байт=32 время=67мс TTL=255
+Ответ от 192.168.168.91: число байт=32 время=84мс TTL=255
+Ответ от 192.168.168.91: число байт=32 время=2мс TTL=255
+Ответ от 192.168.168.91: число байт=32 время=32мс TTL=255
+ 
+Статистика Ping для 192.168.168.91:
+    Пакетов: отправлено = 4, получено = 4, потеряно = 0
+    (0% потерь)
+Приблизительное время приема-передачи в мс:
+    Минимальное = 2мсек, Максимальное = 84 мсек, Среднее = 46 мсек
+ 
+// Ну вот, модуль пингуется, все отлично, можно идти дальше, снова возвращаемся в ESPlorer
+ 
+AT+CWDHCP=1,1 // Я переключусь обратно на получение IP от роутера, мне так удобнее
+OK
+ 
+AT+RST // рестарт
+OK
+ 
+ets Jan  8 2013,rst cause:4, boot mode:(3,7)
+ 
+wdt reset
+load 0x40100000, len 1320, room 16
+tail 8
+chksum 0xb8
+load 0x3ffe8000, len 776, room 0
+tail 8
+chksum 0xd9
+load 0x3ffe8308, len 412, room 0
+tail 12
+chksum 0xb9
+csum 0xb9
+ 
+2nd boot version : 1.3(b3)
+  SPI Speed      : 40MHz
+  SPI Mode       : QIO
+  SPI Flash Size : 4Mbit
+jump to run user1
+ 
+rlЋя
+ready // модуль готов
+ 
+AT+CWJAP? // проверка подключения
++CWJAP:"тутSSIDмоейточкидоступа"
+OK
+ 
+AT+CIPSTA? // проверка IP
++CIPSTA:"192.168.168.7" // IP назначен - запомнили его
+OK
+ 
+// тут можно снова по пинговать, у меня пингуется
+// дальше нам надо поднять сервер
+// для работы TCP сервера на ESP по документации у нас должно быть CIPMODE=0 и CIPMUX=1
+// причем это должно быть именно в таком порядке и именно до поднятия сервера, иначе оно просто не выставится
+ 
+AT+CIPMODE=0 // выставляем CIPMODE
+OK
+ 
+AT+CIPMUX=1 // выставляем CIPMUX
+OK
+ 
+AT+CIPMODE? // проверяем CIPMODE
++CIPMODE:0
+OK
+ 
+AT+CIPMUX? // проверяем CIPMUX
++CIPMUX:1
+OK
+ 
+// все выставлено верно, можно сначала начать с проверки, может оно уже верно выставлено ;)
+ 
+AT+CIPSERVER=1,80 // поднимаем (1) TCP сервер на порту (80)
+OK
+ 
+// вот, собственно, то, чего вы хотите, теперь можно попробовать с какой-нибудь программы подключиться к нашему серверу
+// параметры такие: TCP на IP 192.168.168.7 и порт 80
+// я попробую через hercules отсюда http://www.hw-group.com/products/hercules/index_en.html
+// в режиме TCP client ввожу IP и порт и жму Connect
+// после подключения нажимаю отправить строку "hello ESP"
+// При этом в ESPlorer вижу следующее:
+ 
+0,CONNECT // подключился клиент на соединение с индексом (0)
+ 
++IPD,0,9:hello ESP // по соединению с индексом (0) получили (9) байт данных и сами байты "hello ESP" - ровно 9 символов
+ 
+// попробуем отправить что-то в ответ, набираем в ESPlorer команды
+AT+CIPSEND=0,5 // отправить в соединение с индексом (0) сообщение длинной (5) байт
+OK
+> // ESP ждет от нас ровно 5 байт! важно теперь отправить ровно 5 символов/байт
+ 
+hi! // я отправляю "hi!", но так как в ESPlorer выставлено добавлять CR и LF к каждому сообщению, то как раз получается 5 символов в сумме
+SEND OK // ESP отрапортовал, что отправил
+ 
+// далее в hercules отключусь - Diconnect
+// в ESPlorer получу:
+ 
+0,CLOSED // клиент отключен на соединении с индексом (0)

@@ -1,5 +1,12 @@
-To connect to Wifi module with new firmware:
+New firmware (Wifi to UART transparent bridge)
+ESP8266-transparent-bridge
+https://github.com/beckdac/ESP8266-transparent-bridge
 
+Firmware flasher application:
+Nodemcu flasher
+https://github.com/nodemcu/nodemcu-flasher
+
+To connect to Wifi module with new firmware:
 1) Use "SocketTest3" application
 2) Select the "Clent" tab
 3) IP:192.168.4.1

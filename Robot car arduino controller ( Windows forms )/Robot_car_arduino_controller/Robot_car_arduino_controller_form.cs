@@ -254,7 +254,7 @@ namespace Robot_car_arduino_controller
             if( m_Previous_rover_command != null &&  // If there is some previous command...
                 Enumerable.SequenceEqual( m_Previous_rover_command, Command_bytes_array ) )  // ...and the previous command is the same as the current command.
             {
-                return;  // Don't send the current command
+               // return;  // Don't send the current command
             }
 
             m_Previous_rover_command = Command_bytes_array;  // Save the last send command, to not send it again

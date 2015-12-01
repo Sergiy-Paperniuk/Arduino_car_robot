@@ -206,8 +206,7 @@ namespace Robot_car_arduino_controller
                     return;
                 }
 
-                // string Com_port_name = cbComPorts.SelectedValue.ToString();
-                string Com_port_name = "COM2";
+                string Com_port_name = cbComPorts.SelectedValue.ToString();
 
                 Task<Com_port_class> openComPort = new Task<Com_port_class>( () =>
                 {
@@ -254,7 +253,7 @@ namespace Robot_car_arduino_controller
             if( m_Previous_rover_command != null &&  // If there is some previous command...
                 Enumerable.SequenceEqual( m_Previous_rover_command, Command_bytes_array ) )  // ...and the previous command is the same as the current command.
             {
-               // return;  // Don't send the current command
+               return;  // Don't send the current command
             }
 
             m_Previous_rover_command = Command_bytes_array;  // Save the last send command, to not send it again
@@ -323,6 +322,17 @@ namespace Robot_car_arduino_controller
 
         private void Send_one_comand_timer_tick( object sender, EventArgs e )
         {
+            // Read log message from the COM port and display it on the screen
+            if( Current_com_port != null )
+            {
+                string message = Current_com_port.Read();
+
+                if (message != null)
+                {
+                    SerialPortMonitorTextBox.AppendText(message + "\r\n");
+                }
+            }
+
             Send_current_rover_driving_command_to_com_port();
             SendCurrentHandCommandAsync();
 

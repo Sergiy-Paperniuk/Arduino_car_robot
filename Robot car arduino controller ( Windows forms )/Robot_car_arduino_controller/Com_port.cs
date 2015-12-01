@@ -16,8 +16,8 @@ namespace Robot_car_arduino_controller
         {
             // Create the serial port with basic settings
 
-            // serialPort = new SerialPort( portName: "Port_name",
-            serialPort = new SerialPort( portName: "COM2",  // Temborary hardcoded
+            //serialPort = new SerialPort( portName: "COM2",  // Temborary hardcoded
+            serialPort = new SerialPort( portName: Port_name,
                                          baudRate: 9600,
                                          parity: Parity.None,
                                          dataBits: 8,
@@ -74,6 +74,40 @@ namespace Robot_car_arduino_controller
 
                 throw;
             }
+        }
+
+        public string Read()
+        {
+            if( serialPort == null ||
+                m_disposed )
+            {
+                return null;
+            }
+
+            try
+            {
+                if( serialPort.BytesToRead != 0 )
+                {
+                    string message = serialPort.ReadLine();
+                    return message;
+                }
+            }
+            catch( TimeoutException )
+            {
+                return null;
+            }
+            catch( Exception )
+            {
+                if( m_disposed )
+                {
+                    return null;
+                }
+
+
+                throw;
+            }
+
+            return null;
         }
 
         public async static Task<ComPortInfo[]> GetComPorts()

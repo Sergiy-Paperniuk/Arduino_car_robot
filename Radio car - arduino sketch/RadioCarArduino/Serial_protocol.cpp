@@ -74,6 +74,10 @@ void Serial_protocol_class::Handle_one_byte( uint8_t Incomming_byte )
         {
           Handle_message( Message_buffer, Message_size, Message_type_ID );  // The checksum is OK. We got a valid message. Handle it.
         }
+        else
+        {
+          Serial.write( "ERROR. Wrong command checksum.\n" );  // Debug
+        }
 
         State = IDLE;  // Wait for the next message
       }

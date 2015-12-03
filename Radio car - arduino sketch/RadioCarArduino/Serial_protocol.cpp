@@ -72,10 +72,12 @@ void Serial_protocol_class::Handle_one_byte( uint8_t Incomming_byte )
       {
         if( Checksum == Incomming_byte )  // The last packet byte is a checksum. Compare calculated and transferred checksum.
         {
+          LED_blink(2);  // Debug
           Handle_message( Message_buffer, Message_size, Message_type_ID );  // The checksum is OK. We got a valid message. Handle it.
         }
         else
         {
+          LED_blink(5);  // Debug
           Serial.write( "ERROR. Wrong command checksum.\n" );  // Debug
         }
 

@@ -158,11 +158,11 @@ namespace Robot_car_arduino_controller
     private byte Get_rover_turn_angle()  //  [0..180]
     {
       const long MIN_TURN_ANGLE = 0;
-      const long MAX_TURN_ANGLE = 180;
+      const long MAX_TURN_ANGLE = 80;
 
-      long Turn_angle = 255 - Joystick_X;  // [0..510]
+      long Turn_angle = Joystick_X + 255;  // [0..510]
 
-      Turn_angle = (Turn_angle * 180) / 510;  // [0..180]
+      Turn_angle = (Turn_angle * 80) / 510;  // [0..80]
 
       if( Turn_angle < MIN_TURN_ANGLE )
       {
@@ -198,7 +198,7 @@ namespace Robot_car_arduino_controller
         Moving_direction = BACKWARD;  // 2
       }
 
-      byte Turn_angle = Get_rover_turn_angle();  // [0..180]
+      byte Turn_angle = Get_rover_turn_angle();  // [ 0 - 40 - 80 ]
 
       byte[] Rover_driving_command = { /* 0 */ 0x24,  // '$'
                                        /* 1 */ 0x4D,  // 'M'

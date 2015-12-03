@@ -19,13 +19,19 @@ namespace Rover_driving_message_handler
   const uint8_t ROVER_DRIVING_COMMAND_FORWARD = 1;
   const uint8_t ROVER_DRIVING_COMMAND_BACKWARD = 2;
 
-  // Turn constants -------------------------------------------------------------------------------------------------------
-  // 0 - Max right    180 - Max left 
-  const int SERVO_CENTER_ANGLE = 102;  // [0..180]  Degrees
+  // Input turn constants -------------------------------------------------------------------------------------------------------
+  // 0 - Max left  80 - Max right
+  const int MIN_INPUT_ANGLE = 0;      // Degrees
+  const int CENTER_INPUT_ANGLE = 40;  // Degrees
+  const int MAX_INPUT_ANGLE = 80;     // Degrees
 
-  const int SERVO_MIN_ANGLE = 54; // Degrees
-  const int SERVO_MAX_ANGLE = 156; // Degrees
-  
+  // Servo turn constants ----------------------------------------------------------------------------------------------------
+  // 180 - Max left  0 - Max right    
+  const int SERVO_MIN_ANGLE = 54;      // Degrees
+  const int SERVO_CENTER_ANGLE = 102;  // Degrees
+  const int SERVO_MAX_ANGLE = 156;     // Degrees
+  // ----------------------------------------------------------------------------------------------------------------------------
+
   // Drive constants ------------------------------------------------------------------------------------------------------
   // MAX rover speed threshold
   const int MAX_ROVER_SPEED = 255;  // [0..255]

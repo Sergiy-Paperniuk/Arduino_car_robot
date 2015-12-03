@@ -126,7 +126,7 @@ Drive( bool* An_error_has_occured_POINTER,
      digitalWrite( IN1_PIN, LOW );
      digitalWrite( IN2_PIN, HIGH );
 
-     // digitalWrite( LED_PIN, HIGH );              // Debug
+     digitalWrite( LED_PIN, HIGH );              // Debug
      Serial.write( "Drive forward. Speed = " );  // Debug
      Serial.print( Rover_speed, DEC );           // Debug
    break;
@@ -137,7 +137,7 @@ Drive( bool* An_error_has_occured_POINTER,
      digitalWrite( IN1_PIN, HIGH );
      digitalWrite( IN2_PIN, LOW );
 
-     // digitalWrite( LED_PIN, LOW );                // Debug
+     digitalWrite( LED_PIN, LOW );                // Debug
      Serial.write( "Drive backward. Speed = " );  // Debug
      Serial.print( Rover_speed, DEC );            // Debug
    break;
@@ -148,7 +148,7 @@ Drive( bool* An_error_has_occured_POINTER,
      digitalWrite( IN1_PIN, LOW );
      digitalWrite( IN2_PIN, LOW );
 
-     // digitalWrite( LED_PIN, LOW );  // Debug
+     digitalWrite( LED_PIN, LOW );  // Debug
      Serial.write( "Stop" );       // Debug
    break;  
    

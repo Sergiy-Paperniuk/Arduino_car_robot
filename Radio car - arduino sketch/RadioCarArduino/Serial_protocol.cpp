@@ -76,7 +76,7 @@ void Serial_protocol_class::Handle_one_byte( uint8_t Incomming_byte )
         }
         else
         {
-          Serial.write( "ERROR. Wrong command checksum.\n" );  // Debug
+          //Serial.write( "ERROR. Wrong command checksum.\n" );  // Debug
         }
 
         State = IDLE;  // Wait for the next message

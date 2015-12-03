@@ -31,7 +31,7 @@ Handle_rover_driving_message( uint8_t* Message_buffer_POINTER,
                               uint8_t Message_size,
                               uint8_t Message_type_ID )
 {
-  Serial.write( "New rover driving message received:\n" );  // Debug
+  //Serial.write( "New rover driving message received:\n" );  // Debug
   
   Turn( & An_error_has_occured, Message_buffer_POINTER );
   Drive( & An_error_has_occured, Message_buffer_POINTER );
@@ -44,9 +44,9 @@ Turn( bool* An_error_has_occured_POINTER,
 {
   unsigned char Servo_turn_angle = Message_buffer_POINTER[ 2 ];  // 0 - 40 - 80
 
-  Serial.write( "Input turn angle = " );  // Debug
-  Serial.print( Servo_turn_angle, DEC );  // Debug
-  Serial.write( ".\n" );                  // Debug
+  //Serial.write( "Input turn angle = " );  // Debug
+  //Serial.print( Servo_turn_angle, DEC );  // Debug
+  //Serial.write( ".\n" );                  // Debug
   
   // MIN and MAX input angle thresholds
   if( Servo_turn_angle < MIN_INPUT_ANGLE )
@@ -94,9 +94,9 @@ Turn( bool* An_error_has_occured_POINTER,
     }
   }
 
-  Serial.write( "Servo turn angle = " );  // Debug
-  Serial.print( Servo_turn_angle, DEC );  // Debug
-  Serial.write( ".\n" );                  // Debug
+  //Serial.write( "Servo turn angle = " );  // Debug
+  //Serial.print( Servo_turn_angle, DEC );  // Debug
+  //Serial.write( ".\n" );                  // Debug
 
   // Servo angle: the value to write to the servo, int - from 0 to 180    
   // 0 - Max right    180 - Max left 
@@ -126,9 +126,9 @@ Drive( bool* An_error_has_occured_POINTER,
      digitalWrite( IN1_PIN, LOW );
      digitalWrite( IN2_PIN, HIGH );
 
-     digitalWrite( LED_PIN, HIGH );              // Debug
-     Serial.write( "Drive forward. Speed = " );  // Debug
-     Serial.print( Rover_speed, DEC );           // Debug
+     //digitalWrite( LED_PIN, HIGH );              // Debug
+     //Serial.write( "Drive forward. Speed = " );  // Debug
+     //Serial.print( Rover_speed, DEC );           // Debug
    break;
   
    case ROVER_DRIVING_COMMAND_BACKWARD :
@@ -138,8 +138,8 @@ Drive( bool* An_error_has_occured_POINTER,
      digitalWrite( IN2_PIN, LOW );
 
      digitalWrite( LED_PIN, LOW );                // Debug
-     Serial.write( "Drive backward. Speed = " );  // Debug
-     Serial.print( Rover_speed, DEC );            // Debug
+     //Serial.write( "Drive backward. Speed = " );  // Debug
+     //Serial.print( Rover_speed, DEC );            // Debug
    break;
 
    case ROVER_DRIVING_COMMAND_STOP :
@@ -149,7 +149,7 @@ Drive( bool* An_error_has_occured_POINTER,
      digitalWrite( IN2_PIN, LOW );
 
      digitalWrite( LED_PIN, LOW );  // Debug
-     Serial.write( "Stop" );       // Debug
+     //Serial.write( "Stop" );       // Debug
    break;  
    
    default :  // Error
@@ -158,11 +158,11 @@ Drive( bool* An_error_has_occured_POINTER,
      digitalWrite( IN1_PIN, LOW );
      digitalWrite( IN2_PIN, LOW );
 
-     Serial.write( "Error driving command. Command = " );  // Debug
-     Serial.print( Driving_command, DEC );                 // Debug
+     //Serial.write( "Error driving command. Command = " );  // Debug
+     //Serial.print( Driving_command, DEC );                 // Debug
 
      * An_error_has_occured_POINTER = true;  // Error
   }
 
-  Serial.write( ".\n\n" );  // Debug
+  //Serial.write( ".\n\n" );  // Debug
 }
